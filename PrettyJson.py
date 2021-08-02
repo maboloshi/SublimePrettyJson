@@ -33,7 +33,10 @@ def check_jq():
     jq_init = True
     jq_test = settings.get("jq_binary", "jq")
     try:
-        jq_path = shutil.which(jq_test)
+        if isinstance(jq_test, dict):
+            jq_path = shutil.which(jq_test.get(sublime.platform(), "jq"))
+        else:
+            jq_path = shutil.which(jq_test)
         jq_exists = True
     except OSError as ex:
         sublime.message_dialog(f"[Error]: {ex}")
